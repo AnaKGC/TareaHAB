@@ -37,12 +37,12 @@ save(brca_rnaseq.tumour, file = "brca_rnaseq.RData")
 ## Download Supplementary data and import Table 1
 ## [Supplementary table 1 from Comprehensive molecular portraits of human breast tumours](http://www.nature.com/nature/journal/v490/n7418/full/nature11412.html?foxtrotcallback=true#supplementary-information) has TCGA breast cancer samples classified by PAM50 subtypes and ER Status, PR Status and HER2 Final Status.
 
-temp <- tempfile()
-download.file("https://media.nature.com/original/nature-assets/nature/journal/v490/n7418/extref/nature11412-s2.zip",temp)
-unzip(temp)
-sample_data <- read_excel("nature11412-s2/Supplementary Tables 1-4.xls", sheet = 1, skip = 1)
-unlink("nature11412-s2",recursive = T,force = T)
-rm(temp)
+#temp <- tempfile()
+#download.file("https://media.nature.com/original/nature-assets/nature/journal/v490/n7418/extref/nature11412-s2.zip",temp)
+#unzip(temp)
+sample_data <- read_excel("Supplementary Tables 1-4.xls", sheet = 1, skip = 1)
+#unlink("nature11412-s2",recursive = T,force = T)
+#rm(temp)
 
 save(sample_data, file="sample_data.RData")
 
