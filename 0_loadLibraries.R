@@ -4,6 +4,10 @@
 ##########################################################
 #Check installation of a package
 ##########################################################
+if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+BiocManager::install(version = "3.12")
+
 loadpkg <- function(pkg){
         pkg2install = NA
         installedpkg = NA
