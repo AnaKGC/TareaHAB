@@ -6,7 +6,7 @@
 ##########################################################
 if (!requireNamespace("BiocManager", quietly = TRUE))
         install.packages("BiocManager")
-BiocManager::install(version = "3.12")
+BiocManager::install(version = "3.12", repos='http://cran.us.r-project.org')
 
 loadpkg <- function(pkg){
         pkg2install = NA
