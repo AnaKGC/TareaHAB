@@ -1,23 +1,30 @@
 ## Get the RNASeq and the clinical data
-wd<-""
+args = commandArgs(trailingOnly=TRUE)
+wd<-args[1]
+datafolder<-args[2]
+cancerdata<-args[3]
+suptables<-args[4]
+resultslocation<-args[5]
 setwd(wd)
+
 
 # set seed to be reproduciblish
 set.seed(12345)
 options(stringsAsFactors = FALSE)
 
 
-source("0_loadLibraries.R")
+source(paste(wd,"0_loadLibraries.R",sep="/"))
 
 loadpkg("RTCGAToolbox") # To browse and get TCGA data
 loadpkg("readxl")
 
 #### Get the breast cancer gene expression data from TCGA
-brcaData <- getFirehoseData(dataset="BRCA", runDate="20160128",gistic2Date="20160128",forceDownload=F, clinical =TRUE, RNASeq2GeneNorm  =TRUE)
+#brcaData <- getFirehoseData(dataset="BRCA", runDate="20160128",gistic2Date="20160128",forceDownload=F, clinical =TRUE, RNASeq2GeneNorm  =TRUE)
+load(paste(datafolder,cancerdata,sep="/"))
 
-brca_rnaseq <- getData(brcaData,type = "RNASeq2GeneNorm")
-brca_rnaseq<-brca_rnaseq[[1]]
-brca_rnaseq<-brca_rnaseq@DataMatrix
+#brca_rnaseq <- getData(brcaData,type = "RNASeq2GeneNorm")
+#brca_rnaseq<-brca_rnaseq[[1]]
+#brca_rnaseq<-brca_rnaseq@DataMatrix
 
 
 #### Gene expression data cleaning up
@@ -30,8 +37,9 @@ colnames(brca_rnaseq.tumour) <- substr(colnames(brca_rnaseq.tumour), 1,12)
 ## Make sure we don't have duplicated samples
 brca_rnaseq.tumour <- brca_rnaseq.tumour[, !duplicated(colnames(brca_rnaseq.tumour))]
 
+
 ### write out the brca tumour rnaseq data matrix
-save(brca_rnaseq.tumour, file = "brca_rnaseq.RData")
+save(brca_rnaseq.tumour, file = paste(resultslocation,"brca_rnaseq.RData",sep="/"))
 
 
 ## Download Supplementary data and import Table 1
@@ -40,10 +48,9 @@ save(brca_rnaseq.tumour, file = "brca_rnaseq.RData")
 #temp <- tempfile()
 #download.file("https://media.nature.com/original/nature-assets/nature/journal/v490/n7418/extref/nature11412-s2.zip",temp)
 #unzip(temp)
-sample_data <- read_excel("Supplementary Tables 1-4.xls", sheet = 1, skip = 1)
+sample_data <- read_excel(paste(datafolder,suptables,sep="/"), sheet = 1, skip = 1)
 #unlink("nature11412-s2",recursive = T,force = T)
-#rm(temp)
 
-save(sample_data, file="sample_data.RData")
+save(sample_data, file=paste(resultslocation,"sample_data.RData",sep="/"))
 
 unlink("20160128*",force = T)

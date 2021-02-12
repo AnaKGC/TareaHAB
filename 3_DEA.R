@@ -1,15 +1,17 @@
 ## DEA
-
+setwd(args[1])
 
 # Pass arguments to the script
-args = commandArgs(trailingOnly = TRUE)
+args = commandArgs(trailingOnly=TRUE)
 
-if (length(args) == 0) {
-        stop("At least one breast cancer type must be supplied (one of Basal, TNBC) ", call. = FALSE)
-} else if (length(args) == 1) {
+if (length(args)==0) {
+        stop("At least one breast cancer type must be supplied (one of Basal, TNBC) ", call.=FALSE)
+} else if (length(args)==1) {
         
         args[2] = "LumA"
 }
+
+print(args[1])
 
 # Load the expression data
 load("brca_rnaseq-basal.RData")
@@ -24,6 +26,7 @@ loadpkg("edgeR")
 loadpkg("calibrate") # To label the volcano plot
 
 # Pick the datasets to analyse
+
 
 if(args[1] == "Basal"){d1 = brca_rnaseq.basal}
 if(args[1] == "TNBC"){d1 = brca_rnaseq.tnbc}
@@ -46,11 +49,11 @@ df <- rbind(df.t,df.l)
 design <- model.matrix(~ status, data = df)
 
 
-dge <- DGEList(counts = counts)
+dge <- DGEList(counts=counts)
 A <- rowSums(dge$counts)
 isexpr <- A > 100 # Keeping genes with total counts more than 100.
 dge <- calcNormFactors(dge)
-v <- voom(dge[isexpr,], design, plot = FALSE)
+v <- voom(dge[isexpr,], design, plot=FALSE)
 
 # find genes differentially expression between the two groups of samples combined above
 fit <- lmFit(v, design)
@@ -81,5 +84,5 @@ abline(h = -log10(pval), col = "green3", lty = 2)
 abline(v = c(-lfc, lfc), col = "blue", lty = 2) 
 mtext(paste("pval =", pval), side = 4, at = -log10(pval), cex = 0.8, line = 0.5, las = 1) 
 mtext(c(paste("-", lfc, "fold"), paste("+", lfc, "fold")), side = 3, at = c(-lfc, lfc), cex = 0.8, line = 0.5)
-with(subset(tab2, negLogPval > -log10(pval) & abs(logFC)>lfc), textxy(logFC, negLogPval, labs = Gene, cex = .4))
+with(subset(tab2, negLogPval > -log10(pval) & abs(logFC)>lfc), textxy(logFC, negLogPval, labs=Gene, cex=.4))
 dev.off()

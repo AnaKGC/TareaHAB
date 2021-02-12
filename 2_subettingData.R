@@ -1,3 +1,4 @@
+setwd(args[1])
 source("0_loadLibraries.R")
 loadpkg("dplyr")
 

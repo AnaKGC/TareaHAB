@@ -4,10 +4,6 @@
 ##########################################################
 #Check installation of a package
 ##########################################################
-if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-BiocManager::install(version = "3.12", repos='http://cran.us.r-project.org')
-
 loadpkg <- function(pkg){
         pkg2install = NA
         installedpkg = NA
@@ -16,8 +12,8 @@ loadpkg <- function(pkg){
         }else{
                 require(pkg, character.only=T)} # Load the package if already installed
         if(!is.na(pkg2install)){
-                #source("http://bioconductor.org/biocLite.R")
-                BiocManager::install(pkg2install)
+                source("http://bioconductor.org/biocLite.R")
+                biocLite(pkg2install)
                 installedpkg = pkg
         }
         if(!is.na(installedpkg)){
@@ -29,8 +25,8 @@ loadpkg <- function(pkg){
 
 installpkg <- function (pkg){
         if (!require(pkg, character.only=T)){
-                #source("http://bioconductor.org/biocLite.R")
-                BiocManager::install(pkg)
+                source("http://bioconductor.org/biocLite.R")
+                biocLite(pkg)
         }else{
                 require(pkg, character.only=T) # Load the package if already installed
         }
