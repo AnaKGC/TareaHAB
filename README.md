@@ -7,7 +7,21 @@
 
 ## Introducción
 
- 
+En este trabajo se va a realizar un análisis de expresión génica diferencial sobre un conjunto de datos de cáncer de mama perteneciente a **The Cancer Genome Atlas** (TCGA).
+
+
+El flujo de trabajo se realiza con Bash sobre scripts de R, que es donde se realiza el análisis de los datos.
+
+## Instalación
+
+Es necesario tener intalado R.
+Librerias de R:
+- dplyr:
+- limma: para el análisis de la expresión de genes.
+- edgeR:
+- calibrate: para las gráficas de volcán.
+
+## Procedimiento
 
 Se han conectado estos a través de un script de bash. Con varios parámetros de entrada, de los cuales las rutas deben ser especificadas con su barra final, por ejemplo “Directorio1/Directorio2/”. Los parámetros de entrada son:
 - Directorio de trabajo: donde se encuentren los scripts.
