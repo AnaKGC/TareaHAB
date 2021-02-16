@@ -26,7 +26,7 @@ Librerias de R:
 Se han conectado estos a través de un script de bash. Con varios parámetros de entrada, de los cuales las rutas deben ser especificadas con su barra final, por ejemplo “Directorio1/Directorio2/”. Los parámetros de entrada son:
 - Directorio de trabajo: donde se encuentren los scripts.
 - Directorio de datos: donde están los datos de partida.
-- Datos de cáncer: en nuestro caso brca_rnaseq.RData.
+- Datos de cáncer: en nuestro caso **brca_rnaseq.RData**.
 - Tablas suplementarias: en nuestro caso **SupplementaryTables1-4.xls** de la que nos quedamos con la primera solo.
 - Directorio de resultados: no tiene por qué existir previamente.
 - Columna donde se encuentra el primer filtro, por ejemplo “ER Status”.
