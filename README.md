@@ -16,9 +16,9 @@ El flujo de trabajo se realiza con Bash sobre scripts de R, que es donde se real
 
 Es necesario tener intalado R.
 Librerias de R:
-- dplyr:
+- dplyr: Manipulación de dataframes.
 - limma: para el análisis de la expresión de genes.
-- edgeR:
+- edgeR: Análisis de expresión diferencial de perfiles de expresión de RNA-seq con replicación biológica
 - calibrate: para las gráficas de volcán.
 
 ## Procedimiento
@@ -63,7 +63,7 @@ sh DEA_Script.sh con los argumentos:
 
 Donde en verde están marcados la expresión diferencial que no pasa el filtro y en rojo la que sí lo pasa, en este caso no podemos considerar que haya expresión diferencial entre estos tipos de tumor.
 
-##Ejemplo 2:
+## Ejemplo 2:
 
 Algo donde si esperamos que haya expresión diferencial, para el estado de receptores de estrógeno, así que miramos estos entre casos negativos y casos positivos.
 
