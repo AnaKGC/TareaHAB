@@ -72,6 +72,7 @@ Ejecutando como:
 
 En este caso la ejecución sería cambiando solo los últimos cuatro parámetros a “ER Status” “Negative” “ER Status” “Positive”.
 
+![Alt text](https://github.com/AnaKGC/TareaHAB/blob/master/ejemplo2.JPG?raw=true "Ejemplo1")
 >imagen2
 
 Donde sí tenemos expresión diferencial para AGR3 y C1orf61, viendo la bibliografía AGR3 está directamente relacionada con el receptor de estrógeno y C1orf61 tiene relación con el cáncer.
