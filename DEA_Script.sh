@@ -3,9 +3,16 @@ DATAFOLDER=$2
 CANCERDATA=$3
 SUPTABLES=$4
 RESULTSLOCATION=$5
-SUBSET=$6
+COLUMN_1_FILTER=$6
+FILTER_1=$7
+COLUMN_2_FILTER=$8
+FILTER_2=$9
 
 mkdir -p $RESULTSLOCATION
 Rscript "1_getData.R" $WORKINGDIRECTORY $DATAFOLDER $CANCERDATA $SUPTABLES $RESULTSLOCATION
+Rscript "2_subsettingData.R" $WORKINGDIRECTORY $RESULTSLOCATION "$COLUMN_1_FILTER" "$FILTER_1" "$COLUMN_2_FILTER" "$FILTER_2"
+Rscript "3_DEA.R" $WORKINGDIRECTORY $RESULTSLOCATION "$COLUMN_1_FILTER" "$FILTER_1" "$COLUMN_2_FILTER" "$FILTER_2"
+
 #Ejemplo ejecución 
-#sh DEA_Script.sh "/home/jesus/local_projects/DEA_HAB" "/home/jesus/local_projects/DEA_HAB/Data" "brca_rnaseq.RData" "SupplementaryTables1-4.xls" "/home/jesus/local_projects/DEA_HAB/Results1" "Basal"
+
+#sh DEA_Script.sh "/home/jesus/local_projects/DEA_HAB/" "/home/jesus/local_projects/DEA_HAB/Data/" "brca_rnaseq.RData" "SupplementaryTables1-4.xls" "/home/jesus/local_projects/DEA_HAB/Results1/" "Tumor" "T1" "Tumor" "T2"
