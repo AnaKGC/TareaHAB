@@ -1,15 +1,19 @@
-setwd(args[1])
 source("0_loadLibraries.R")
 loadpkg("dplyr")
 
-## Load data from module 1
+args = commandArgs(trailingOnly=TRUE)
+wd<-args[1]
+resultslocation<-args[2]
 
+setwd(resultslocation)
+
+## Load data from module 1
 load("brca_rnaseq.RData")
 load("sample_data.RData")
 
+setwd(wd)
 
 #### Get the breast cancer subtypes data
-
 
 tnbc_samples <- sample_data %>% dplyr::filter(`ER Status` == "Negative" & `PR Status` == "Negative" & `HER2 Final Status` == "Negative" & `PAM50 mRNA` != "Luminal A")
 tnbc_barcodes <- tnbc_samples$`Complete TCGA ID`
@@ -29,6 +33,11 @@ brca_rnaseq.luminal <- brca_rnaseq.tumour[, which(colnames(brca_rnaseq.tumour) %
 
 brca_rnaseq.basal <- brca_rnaseq.tumour[, which(colnames(brca_rnaseq.tumour) %in% basal_barcodes)]
 
+
+setwd(resultslocation)
+
 save(brca_rnaseq.basal, file = "brca_rnaseq-basal.RData")
 save(brca_rnaseq.luminal, file = "brca_rnaseq-luminal.RData")
 save(brca_rnaseq.tnbc, file = "brca_rnaseq-tnbc.RData")
+
+setwd(wd)
