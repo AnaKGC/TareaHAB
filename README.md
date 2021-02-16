@@ -43,7 +43,9 @@ sh DEA_Script.sh con los argumentos:
 - “Tumor”
 - “T2”
 
-<  ![ScreenShot](/screenshots/imagen1.JPG)
+> imagen1.JPG
+
+
 
 Donde en verde están marcados la expresión diferencial que no pasa el filtro y en rojo la que sí lo pasa, en este caso no podemos considerar que haya expresión diferencial entre estos tipos de tumor.
 
