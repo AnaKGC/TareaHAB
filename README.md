@@ -57,6 +57,7 @@ sh DEA_Script.sh con los argumentos:
 - “Tumor”
 - “T2”
 
+![Alt text](relative/path/to/ejemplo1.JPG?raw=true "Ejemplo1")
 > imagen1.JPG
 
 
