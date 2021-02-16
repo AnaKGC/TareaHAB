@@ -1,23 +1,22 @@
 ## DEA
-args = commandArgs(trailingOnly=TRUE)
-wd<-args[1]
-resultslocation<-args[2]
-tiposubdata<-args[3]
-#tiposubdata2<-args[4]
+args = commandArgs(trailingOnly = TRUE)
+wd <- args[1]
+resultslocation <- args[2]
+tiposubdata <- args[3]
 
 # Pass arguments to the script
-args = commandArgs(trailingOnly=TRUE)
+args = commandArgs(trailingOnly = TRUE)
 
 
 setwd(wd)
-#if (length(args)==0) {
-       # stop("At least one breast cancer type must be supplied (one of Basal, TNBC) ", call.=FALSE)
-#} else if (length(args)==1) {
+if (length(args) == 0) {
+        stop("At least one breast cancer type must be supplied (one of Basal, TNBC) ", call.= FALSE)
+} else if (length(args) == 1) {
         
-        #args[2] = "LumA"
-#}
+        args[2] = "LumA"
+}
 
-#print(args[1])
+print(args[1])
 
 
 setwd(resultslocation)
@@ -39,31 +38,27 @@ loadpkg("calibrate") # To label the volcano plot
 
 if(args[3] == "Basal"){d1 = brca_rnaseq.basal}
 if(args[3] == "TNBC"){d1 = brca_rnaseq.tnbc}
-
 d2 = brca_rnaseq.luminal
 
-cat("Differential Expression analysis of breast cancer subtypes:",args[3], "vs" ,"Luminal" ,"\n")
-
-
-
+cat("Differential Expression analysis of breast cancer subtypes:", args[3], "\n")
 
 
 # We Combine the two matrices for gene differential expression analysis (DEA). Further preprocessing included the removal of expression estimates with counts in less than 20% of cases.
 rnaseq.for.de <- cbind(d1, d2)
-counts = rnaseq.for.de[apply(rnaseq.for.de,1,function(x) sum(x==0))<ncol(rnaseq.for.de)*0.8,]
+counts = rnaseq.for.de[apply(rnaseq.for.de, 1, function(x) sum(x == 0)) < ncol(rnaseq.for.de) * 0.8,]
 
 # Create a design matrix thar contains the RNA samples that are applied to each category (TNBC vs luminal)
 df.l <- data_frame("sample" = colnames(d1), "status" = rep(0, length(colnames(d1))) )
 df.t <- data_frame("sample" = colnames(d2), "status" = rep(1, length(colnames(d2))) )
-df <- rbind(df.t,df.l)
+df <- rbind(df.t, df.l)
 design <- model.matrix(~ status, data = df)
 
 
-dge <- DGEList(counts=counts)
+dge <- DGEList(counts = counts)
 A <- rowSums(dge$counts)
 isexpr <- A > 100 # Keeping genes with total counts more than 100.
 dge <- calcNormFactors(dge)
-v <- voom(dge[isexpr,], design, plot=FALSE)
+v <- voom(dge[isexpr,], design, plot = FALSE)
 
 # find genes differentially expression between the two groups of samples combined above
 fit <- lmFit(v, design)
@@ -77,7 +72,7 @@ diff.exp.df$gene.name <- rownames(diff.exp.df)
 
 # Output, Volcano plot
 tab = data.frame(logFC = diff.exp.df$logFC, negLogPval = -log10(diff.exp.df$adj.P.Val))
-tab2 = data.frame(logFC = diff.exp.df$logFC, negLogPval = -log10(diff.exp.df$adj.P.Val), Gene=diff.exp.df$gene.name)
+tab2 = data.frame(logFC = diff.exp.df$logFC, negLogPval = -log10(diff.exp.df$adj.P.Val), Gene = diff.exp.df$gene.name)
 lfc = 2
 pval = 0.01
 
@@ -87,7 +82,7 @@ write.csv(filter(tab2, abs(logFC) > lfc & negLogPval > -log10(pval)), "dea.csv")
 
 pdf(file = "volcano.pdf", width = 9, height = 4.5)
 par(mar = c(5, 4, 4, 5))
-plot(tab, pch = 16, cex = 0.6, xlab = expression(log[2]~fold~change), ylab = expression(-log[10]~pvalue))
+plot(tab, pch = 16, cex = 0.6, xlab = expression (log[2]~fold~change), ylab = expression (-log[10]~pvalue))
 #signGenes = (abs(tab$logFC) > lfc & tab$negLogPval > -log10(pval))
 points(tab[(abs(tab$logFC) > lfc), ], pch = 16, cex = 0.8, col = "orange") 
 points(tab[(tab$negLogPval > -log10(pval)), ], pch = 16, cex = 0.8, col = "green") 
@@ -95,7 +90,7 @@ points(tab[(abs(tab$logFC) > lfc & tab$negLogPval > -log10(pval)), ], pch = 16, 
 abline(h = -log10(pval), col = "green3", lty = 2) 
 abline(v = c(-lfc, lfc), col = "blue", lty = 2) 
 mtext(paste("pval =", pval), side = 4, at = -log10(pval), cex = 0.8, line = 0.5, las = 1) 
-mtext(c(paste("-", lfc, "fold"), paste("+", lfc, "fold")), side = 3, at = c(-lfc, lfc), cex = 0.8, line = 0.5)
-with(subset(tab2, negLogPval > -log10(pval) & abs(logFC)>lfc), textxy(logFC, negLogPval, labs=Gene, cex=.4))
+mtext(c (paste("-", lfc, "fold"), paste("+", lfc, "fold")), side = 3, at = c(-lfc, lfc), cex = 0.8, line = 0.5)
+with(subset(tab2, negLogPval > -log10(pval) & abs(logFC) > lfc), textxy(logFC, negLogPval, labs = Gene, cex =.4))
 dev.off()
 setwd(wd)
