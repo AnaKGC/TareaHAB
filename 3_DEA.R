@@ -1,27 +1,34 @@
+## DEA
 args = commandArgs(trailingOnly=TRUE)
 wd<-args[1]
+resultslocation<-args[2]
+tiposubdata<-args[3]
+#tiposubdata2<-args[4]
+
+# Pass arguments to the script
+args = commandArgs(trailingOnly=TRUE)
+
+
 setwd(wd)
-results_location<-args[2]
-column_filter_1<-args[3]
-filter_1<-args[4]
-column_filter_2<-args[5]
-filter_2<-args[6]
+#if (length(args)==0) {
+       # stop("At least one breast cancer type must be supplied (one of Basal, TNBC) ", call.=FALSE)
+#} else if (length(args)==1) {
+        
+        #args[2] = "LumA"
+#}
 
-## DEA
+#print(args[1])
 
 
-filter_1_name<-paste("brca_rnaseq",column_filter_1,filter_1,"RData",sep=".")
-expr_f_1<-paste(results_location,filter_1_name,sep="")
-filter_2_name<-paste("brca_rnaseq",column_filter_2,filter_2,"RData",sep=".")
-expr_f_2<-paste(results_location,filter_2_name,sep="")
-
+setwd(resultslocation)
 
 # Load the expression data
-load(expr_f_1)
-load(expr_f_2)
+load("brca_rnaseq-basal.RData")
+load("brca_rnaseq-luminal.RData")
+load("brca_rnaseq-tnbc.RData")
 
-
-source(paste(wd,"0_loadLibraries.R",sep=""))
+setwd(wd)
+source("0_loadLibraries.R")
 loadpkg("dplyr")
 loadpkg("limma") # Differential gene expression analysis (DEA)
 loadpkg("edgeR")
@@ -30,10 +37,12 @@ loadpkg("calibrate") # To label the volcano plot
 # Pick the datasets to analyse
 
 
-d1=brca_rnaseq.filter1
-d2=brca_rnaseq.filter2
+if(args[3] == "Basal"){d1 = brca_rnaseq.basal}
+if(args[3] == "TNBC"){d1 = brca_rnaseq.tnbc}
 
-cat("Differential Expression analysis of breast cancer subtypes:",column_filter_1," ",filter_1, "vs ",column_filter_2," ",filter_2, "\n")
+d2 = brca_rnaseq.luminal
+
+cat("Differential Expression analysis of breast cancer subtypes:",args[3], "vs" ,"Luminal" ,"\n")
 
 
 
@@ -71,16 +80,14 @@ tab = data.frame(logFC = diff.exp.df$logFC, negLogPval = -log10(diff.exp.df$adj.
 tab2 = data.frame(logFC = diff.exp.df$logFC, negLogPval = -log10(diff.exp.df$adj.P.Val), Gene=diff.exp.df$gene.name)
 lfc = 2
 pval = 0.01
-dea_name<-paste("dea",column_filter_1,filter_1,column_filter_2,filter_2,"csv",sep=".")
-dea_path<-paste(results_location,dea_name,sep="")
-write.csv(filter(tab2, abs(logFC) > lfc & negLogPval > -log10(pval)), dea_path) # write output
-volcano_name<-paste("volcano",column_filter_1,filter_1,column_filter_2,filter_2,"pdf",sep=".")
-volcano_path<-paste(results_location,volcano_name,sep="")
 
-plot_title<-paste(column_filter_1," ",filter_1, " vs ",column_filter_2," ",filter_2)
-pdf(file = volcano_path, width = 9, height = 4.5)
+setwd(resultslocation)
+
+write.csv(filter(tab2, abs(logFC) > lfc & negLogPval > -log10(pval)), "dea.csv") # write output
+
+pdf(file = "volcano.pdf", width = 9, height = 4.5)
 par(mar = c(5, 4, 4, 5))
-plot(tab, pch = 16, cex = 0.6, main= plot_title,xlab = expression(log[2]~fold~change), ylab = expression(-log[10]~pvalue))
+plot(tab, pch = 16, cex = 0.6, xlab = expression(log[2]~fold~change), ylab = expression(-log[10]~pvalue))
 #signGenes = (abs(tab$logFC) > lfc & tab$negLogPval > -log10(pval))
 points(tab[(abs(tab$logFC) > lfc), ], pch = 16, cex = 0.8, col = "orange") 
 points(tab[(tab$negLogPval > -log10(pval)), ], pch = 16, cex = 0.8, col = "green") 
@@ -91,3 +98,4 @@ mtext(paste("pval =", pval), side = 4, at = -log10(pval), cex = 0.8, line = 0.5,
 mtext(c(paste("-", lfc, "fold"), paste("+", lfc, "fold")), side = 3, at = c(-lfc, lfc), cex = 0.8, line = 0.5)
 with(subset(tab2, negLogPval > -log10(pval) & abs(logFC)>lfc), textxy(logFC, negLogPval, labs=Gene, cex=.4))
 dev.off()
+setwd(wd)
