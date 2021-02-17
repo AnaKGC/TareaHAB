@@ -53,4 +53,4 @@ sample_data <- read_excel (paste ("SupplementaryTables1-4.xls", sep = ""), sheet
 setwd(resultslocation)
 save(sample_data, file = paste (resultslocation, "sample_data.RData", sep = ""))
 setwd(wd)
-unlink("20160128*",force = T)
+unlink("20160128*", force = T)
