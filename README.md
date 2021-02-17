@@ -54,13 +54,10 @@ Donde sí tenemos expresión diferencial para AGR3 y FZD9, viendo la bibliograf�
 ## Ejemplo 2:
 
 Comparamos "Basal" con "LumA".
+
 Para la ejecución sería:
 
 sh DEA_Script.sh "WORKINGDIR/" "WORKINGDIR/results/" "Basal"
-
-Ejecutando como:
-
-En este caso la ejecución sería cambiando solo los últimos cuatro parámetros a “ER Status” “Negative” “ER Status” “Positive”.
 
 ![Alt text](https://github.com/AnaKGC/TareaHAB/blob/master/Basal_LuminA.jpeg "Basal-LumA")
 >Basal-LumA
