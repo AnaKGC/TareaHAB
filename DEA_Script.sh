@@ -2,7 +2,7 @@ WORKINGDIRECTORY=$1
 SUBSET=$3
 
 
-for software in $WORKINGDIRECTORY
+for results in $WORKINGDIRECTORY
 do
   if [ -d $WORKINGDIRECTORY/results ]
   then
