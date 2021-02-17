@@ -1,4 +1,4 @@
-# Flujo de trabajo en  Bash, cáncer de mama (TCGA)
+# Flujo de trabajo en  Bash: TCGA Breast cancer data analysis
 
 ## Componentes del grupo:
 - Ana Galiá Caravaca
@@ -16,6 +16,8 @@ El flujo de trabajo se realiza con Bash sobre scripts de R, que es donde se real
 
 Es necesario tener intalado R.
 Librerias de R:
+- RTCGAToolbox: herramienta para exportar datos TCGA Firehose.
+- readxl: representación de los datos de distintas formas.
 - dplyr: Manipulación de dataframes.
 - limma: para el análisis de la expresión de genes.
 - edgeR: Análisis de expresión diferencial de perfiles de expresión de RNA-seq con replicación biológica
@@ -25,54 +27,42 @@ Librerias de R:
 
 Se han conectado estos a través de un script de bash. Con varios parámetros de entrada, de los cuales las rutas deben ser especificadas con su barra final, por ejemplo “Directorio1/Directorio2/”. Los parámetros de entrada son:
 - Directorio de trabajo: donde se encuentren los scripts.
-- Directorio de datos: donde están los datos de partida.
-- Datos de cáncer: en nuestro caso **brca_rnaseq.RData**.
-- Tablas suplementarias: en nuestro caso **SupplementaryTables1-4.xls** de la que nos quedamos con la primera solo.
 - Directorio de resultados: no tiene por qué existir previamente.
-- Columna donde se encuentra el primer filtro, por ejemplo “ER Status”.
-- Filtro para la primera columna, por ejemplo para ER negativo con la columna indicada antes sería “Negative”.
-- Filtro para la columna del segundo filtro, en caso de que se quieran comparar de dos columnas distintas.
-- Filtro para la segunda columna.
+- Subconjunto que se quiera representar: "Basal" o "TNBC" que se comparará con "LumA".
 
 Como resultados se obtienen algunos pasos intermedios y como resultados finales un csv con los resultados de la expresión diferencial y una gráfica volcán con los mismos.
 
-Se han corregido los scripts de R para no descargar archivos automáticamente y poder cargar los locales.
-
-Algunos de estos scripts se han cambiado para que estén más generalizados y permitan varios estudios en lugar de solo uno.
 
 ## Ejemplo 1:
-Tomamos tipos de tumor T1 y T2.
+Comparamos "TNBC" con "LumA".
 
 Para la ejecución sería:
 
-sh DEA_Script.sh con los argumentos:
+sh DEA_Script.sh "WORKINGDIR/" "WORKINGDIR/results/" "TNBC"
 
-- “./DEA_HAB/”
-- “./DEA_HAB/Data/”
-- “brca_rnaseq.RData”
-- “SupplementaryTables1-4.xls”
-- “./DEA_HAB/Results1/”
-- “Tumor”
-- “T1”
-- “Tumor”
-- “T2”
+- "WORKINGDIR" es la ruta del directorio del proyecto.
 
-![Alt text](https://github.com/AnaKGC/TareaHAB/blob/master/ejemplo1.JPG?raw=true "Ejemplo1")
+- "WORKINGDIR/results" es la carpeta que se crea como results, donde se guardan los resultados.
+
+![Alt text](https://github.com/AnaKGC/TareaHAB/blob/master/TNBC_LuminA.JPG?raw=true "Ejemplo1")
 > imagen1.JPG
 
+Donde en verde están marcados la expresión diferencial que no pasa el filtro y en rojo la que sí lo pasa, en este caso podemos considerar que haya expresión diferencial entre estos tipos de tumor.
 
-
-Donde en verde están marcados la expresión diferencial que no pasa el filtro y en rojo la que sí lo pasa, en este caso no podemos considerar que haya expresión diferencial entre estos tipos de tumor.
-
+Donde sí tenemos expresión diferencial para AGR3 y FZD9, viendo la bibliografía AGR3 está directamente relacionada con el receptor de estrógeno y FZD9 es un biomarcador del cáncer de mama triple negativo.
+ 
 ## Ejemplo 2:
 
-Algo donde si esperamos que haya expresión diferencial, para el estado de receptores de estrógeno, así que miramos estos entre casos negativos y casos positivos.
+Comparamos "Basal" con "LumA".
+Para la ejecución sería:
+
+sh DEA_Script.sh "WORKINGDIR/" "WORKINGDIR/results/" "Basal"
 
 Ejecutando como:
 
 En este caso la ejecución sería cambiando solo los últimos cuatro parámetros a “ER Status” “Negative” “ER Status” “Positive”.
 
-![Alt text](https://github.com/AnaKGC/TareaHAB/blob/master/ejemplo2.JPG?raw=true "Ejemplo1")
+![Alt text](https://github.com/AnaKGC/TareaHAB/blob/master/Basal_LuminA.JPG?raw=true "Ejemplo1")
 >imagen2
 
-Donde sí tenemos expresión diferencial para AGR3 y C1orf61, viendo la bibliografía AGR3 está directamente relacionada con el receptor de estrógeno y C1orf61 tiene relación con el cáncer.
+Donde sí tenemos expresión diferencial para AGR3 y ART3, viendo la bibliografía AGR3 está directamente relacionada con el receptor de estrógeno y ART3 regula la función de las células de cáncer de mama triple negativo.
