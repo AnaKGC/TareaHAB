@@ -1,18 +1,24 @@
 WORKINGDIRECTORY=$1
-DATAFOLDER=$2
-CANCERDATA=$3
-SUPTABLES=$4
-RESULTSLOCATION=$5
-COLUMN_1_FILTER=$6
-FILTER_1=$7
-COLUMN_2_FILTER=$8
-FILTER_2=$9
+SUBSET=$3
 
-mkdir -p $RESULTSLOCATION
-Rscript "1_getData.R" $WORKINGDIRECTORY $DATAFOLDER $CANCERDATA $SUPTABLES $RESULTSLOCATION
-Rscript "2_subsettingData.R" $WORKINGDIRECTORY $RESULTSLOCATION "$COLUMN_1_FILTER" "$FILTER_1" "$COLUMN_2_FILTER" "$FILTER_2"
-Rscript "3_DEA.R" $WORKINGDIRECTORY $RESULTSLOCATION "$COLUMN_1_FILTER" "$FILTER_1" "$COLUMN_2_FILTER" "$FILTER_2"
 
-#Ejemplo ejecución 
+for software in $WORKINGDIRECTORY
+do
+  if [ -d $WORKINGDIRECTORY/results ]
+  then
+    echo "La capeta results ya existe."
+else
+	mkdir -p $WORKINGDIRECTORY/results
+    if [ $WORKINGDIRECTORY -eq 0 + ]
+    then
+      echo "Ups! Algo ha fallado al crear results"
+    else
+      echo "results se ha creado con éxito"
+    fi
+  fi
+done
 
-#sh DEA_Script.sh "/home/jesus/local_projects/DEA_HAB/" "/home/jesus/local_projects/DEA_HAB/Data/" "brca_rnaseq.RData" "SupplementaryTables1-4.xls" "/home/jesus/local_projects/DEA_HAB/Results1/" "Tumor" "T1" "Tumor" "T2"
+
+Rscript "1_getData.R" $WORKINGDIRECTORY $WORKINGDIRECTORY/results/
+Rscript "2_subettingData.R" $WORKINGDIRECTORY $WORKINGDIRECTORY/results/
+Rscript "3_DEA.R" $WORKINGDIRECTORY $WORKINGDIRECTORY/results/ $SUBSET
